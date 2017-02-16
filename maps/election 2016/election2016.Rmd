@@ -89,12 +89,12 @@ dim(final)
 
 # identify lost data
 lost <- merged[merged$FIPS %in% final$FIPS == FALSE, ]
-lost$county
+head(lost)
+unique(lost$county)
 ```
 
-We didn't lose much data in the merge; most of the lost observations 
-have the county name "Alaska" and were probably erroneously included 
-in this county-level dataset to begin with. All in all, a successful merge. 
+Looks like we lost Alaska, for which we didn't have 2012 returns. Otherwise, 
+a successful merge. 
 
 ## Difference in Republican vote share from 2012 to 2016: overall and in battleground states
 
@@ -158,6 +158,7 @@ library(ggmap)
 # merge data onto county.fips
 cf <- county.fips
 names(cf) <- c("FIPS", "name")
+
 toplot <- merge(cf, final, by = "FIPS", all.x = TRUE) 
 
 # function to compute alpha
@@ -178,6 +179,8 @@ alpha1 <- alpha.compute(invar = toplot$gop_vs_pct_ch)
 toplot$cols1 <- ifelse(toplot$gop_vs_pct_ch < 0, 
                        rgb(red = 0, blue = 1, green = 0, alpha = alpha1),
                        rgb(red = 1, blue = 0, green = 0, alpha = alpha1))
+
+
 
 # create map
 map(database = "county", lty = 0) # activate empty map
